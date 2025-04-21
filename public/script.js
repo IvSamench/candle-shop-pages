@@ -16,7 +16,7 @@ async function loadProductData() {
         
         // Если нет данных в localStorage, загружаем из products.json
         console.log('Загружаем оригинальные товары из products.json');
-        const response = await fetch('../products.json');
+        const response = await fetch('./products.json');
         
         if (!response.ok) {
             throw new Error(`Ошибка загрузки: ${response.status}`);
@@ -33,7 +33,71 @@ async function loadProductData() {
         console.log('Загружено товаров:', products.length);
     } catch (error) {
         console.error('Ошибка при загрузке продуктов:', error);
+        
+        // Резервное решение: загружаем встроенные данные о продуктах
+        fallbackLoadProducts();
     }
+}
+
+// Функция резервной загрузки продуктов (на случай если fetch не сработает)
+function fallbackLoadProducts() {
+    console.log('Используем резервные данные о продуктах');
+    products = [
+        {
+          "id": 1,
+          "name": "Ароматическая свеча \"Лаванда\"",
+          "price": 10,
+          "image": "img/1.png",
+          "inStock": false,
+          "description": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов"
+        },
+        {
+          "id": 2,
+          "name": "Свеча \"Ваниль\"",
+          "price": 20,
+          "image": "img/2.png",
+          "description": "Сладкая ванильная свеча. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 3,
+          "name": "Свеча \"Морской бриз\"",
+          "price": 80,
+          "image": "img/3.png",
+          "description": "Свежая свеча с ароматом моря. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 4,
+          "name": "Свеча \"Корица\"",
+          "price": 25,
+          "image": "img/4.jpg",
+          "description": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 5,
+          "name": "Свеча \"Цитрус\"",
+          "price": 15,
+          "image": "img/5.jpg",
+          "description": "Свежая свеча с цитрусовым ароматом. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 6,
+          "name": "Свеча \"Мята\"",
+          "price": 22,
+          "image": "img/6.avif",
+          "description": "Освежающая свеча с ароматом мяты. Время горения: 40 часов",
+          "inStock": true
+        }
+    ];
+    
+    // Сохраняем в localStorage на случай перезагрузки страницы
+    localStorage.setItem('productsData', JSON.stringify(products));
+    
+    // Отображаем товары на странице
+    renderProductCard(products);
 }
 
 // Запускаем загрузку товаров при загрузке страницы
