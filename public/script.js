@@ -16,21 +16,60 @@ async function loadProductData() {
         
         // Если нет данных в localStorage, загружаем из products.json
         console.log('Загружаем оригинальные товары из products.json');
-        const response = await fetch('./products.json');
         
-        if (!response.ok) {
-            throw new Error(`Ошибка загрузки: ${response.status}`);
+        // Получаем базовый URL текущей страницы для формирования абсолютного пути
+        const baseURL = window.location.origin + window.location.pathname.replace(/\/[^\/]*$/, '/');
+        console.log('Базовый URL:', baseURL);
+        
+        // Пробуем разные пути к файлу products.json
+        // Сначала пробуем абсолютный путь
+        try {
+            const response = await fetch(baseURL + 'products.json');
+            if (response.ok) {
+                const originalData = await response.json();
+                products = originalData;
+                localStorage.setItem('productsData', JSON.stringify(originalData));
+                renderProductCard(products);
+                console.log('Загружено товаров (абсолютный путь):', products.length);
+                return;
+            }
+        } catch (e) {
+            console.log('Не удалось загрузить по абсолютному пути:', e);
         }
         
-        const originalData = await response.json();
-        products = originalData;
+        // Затем пробуем относительный путь к корню
+        try {
+            const response = await fetch('/products.json');
+            if (response.ok) {
+                const originalData = await response.json();
+                products = originalData;
+                localStorage.setItem('productsData', JSON.stringify(originalData));
+                renderProductCard(products);
+                console.log('Загружено товаров (путь к корню):', products.length);
+                return;
+            }
+        } catch (e) {
+            console.log('Не удалось загрузить по пути к корню:', e);
+        }
         
-        // Сохраняем исходные данные в localStorage
-        localStorage.setItem('productsData', JSON.stringify(originalData));
+        // Затем пробуем путь с одним уровнем вверх
+        try {
+            const response = await fetch('../products.json');
+            if (response.ok) {
+                const originalData = await response.json();
+                products = originalData;
+                localStorage.setItem('productsData', JSON.stringify(originalData));
+                renderProductCard(products);
+                console.log('Загружено товаров (путь с одним уровнем вверх):', products.length);
+                return;
+            }
+        } catch (e) {
+            console.log('Не удалось загрузить по пути с одним уровнем вверх:', e);
+        }
         
-        // Отображаем товары на странице
-        renderProductCard(products);
-        console.log('Загружено товаров:', products.length);
+        // Если ничего не помогло, выбрасываем ошибку
+        throw new Error('Не удалось загрузить файл products.json ни по одному из путей');
+        
     } catch (error) {
         console.error('Ошибка при загрузке продуктов:', error);
         
@@ -41,7 +80,7 @@ async function loadProductData() {
 
 // Функция резервной загрузки продуктов (на случай если fetch не сработает)
 function fallbackLoadProducts() {
-    console.log('Используем резервные данные о продуктах');
+    console.log('Используем встроенные данные о продуктах');
     products = [
         {
           "id": 1,
@@ -89,6 +128,38 @@ function fallbackLoadProducts() {
           "price": 22,
           "image": "img/6.avif",
           "description": "Освежающая свеча с ароматом мяты. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 7,
+          "name": "Ароматическая свеча \"Лаванда\"",
+          "price": 20,
+          "image": "img/1.png",
+          "inStock": false,
+          "description": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов"
+        },
+        {
+          "id": 8,
+          "name": "Свеча \"Ваниль\"",
+          "price": 48,
+          "image": "img/2.png",
+          "description": "Сладкая ванильная свеча. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 9,
+          "name": "Свеча \"Морской бриз\"",
+          "price": 99,
+          "image": "img/3.png",
+          "description": "Свежая свеча с ароматом моря. Время горения: 40 часов",
+          "inStock": true
+        },
+        {
+          "id": 10,
+          "name": "Свеча \"Корица\"",
+          "price": 5,
+          "image": "img/4.jpg",
+          "description": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
           "inStock": true
         }
     ];
