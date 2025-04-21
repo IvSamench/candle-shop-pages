@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <!-- Форма входа -->
+    <div id="login-container" class="login-container">
+        <div class="login-logo">
+            <i class="fas fa-lock"></i>
+        </div>
+        <div class="login-header">
+            <h1>Панель администратора</h1>
+            <p>Введите данные для входа в систему</p>
+        </div>
+        <form id="login-form">
+            <div class="input-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" name="username" placeholder="Введите имя пользователя" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" name="password" placeholder="Введите пароль" required>
+            </div>
+            <button type="submit" class="login-btn">Войти</button>
+            <div class="error-message" id="error-message">
+                Неверное имя пользователя или пароль
+            </div>
+        </form>
+    </div>
+
+    <!-- Админ-панель: список товаров -->
+    <div id="admin-container" class="admin-container" style="display: none;">
+        <div class="header">
+            <h1>Управление товарами</h1>
+            <div class="header-buttons">
+                <button id="order-btn" class="order-btn">Заказы</button>
+                <button id="add-product-btn" class="add-btn">Добавить товар</button>
+                <button id="reset-data-btn" class="reset-btn">Сбросить все изменения</button>
+                <button id="logout-btn" class="logout-btn">Выйти</button>
+            </div>
+        </div>
+        
+        <!-- Уведомление о временных изменениях -->
+        <div id="temp-notice" class="temp-notice-warning">
+            Внимание: Изменения сохраняются до сброса данных
+        </div>
+
+        <!-- Таблица товаров -->
+        <div id="products-list-container" class="products-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Изображение</th>
+                        <th>Название</th>
+                        <th>Цена</th>
+                        <th>В наличии</th>
+                        <th>Действия</th>
+                    </tr>
+                </thead>
+                <tbody id="productTable">
+                    <!-- Товары будут добавлены динамически -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Секция заказов -->
+    <div id="orders-container" class="admin-container" style="display: none;">
+        <div class="header">
+            <h1>Управление заказами</h1>
+            <div class="header-buttons">
+                <button id="back-to-products-btn" class="back-btn">← Назад к товарам</button>
+            </div>
+        </div>
+
+        <div class="orders-dashboard">
+            <div class="orders-summary">
+                <div class="summary-card">
+                    <h3>Всего заказов</h3>
+                    <p id="total-orders">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Новых заказов</h3>
+                    <p id="new-orders">0</p>
+                </div>
+                <div class="summary-card">
+                    <h3>Сумма заказов</h3>
+                    <p id="total-revenue">0 €</p>
+                </div>
+            </div>
+            
+            <div class="orders-filters">
+                <div class="filter-group">
+                    <label for="status-filter">Статус:</label>
+                    <select id="status-filter">
+                        <option value="all">Все</option>
+                        <option value="new">Новые</option>
+                        <option value="processing">В обработке</option>
+                        <option value="completed">Выполненные</option>
+                        <option value="cancelled">Отменённые</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="date-sort">Сортировка:</label>
+                    <select id="date-sort">
+                        <option value="newest">Сначала новые</option>
+                        <option value="oldest">Сначала старые</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="orders-list" class="orders-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID заказа</th>
+                            <th>Дата</th>
+                            <th>Клиент</th>
+                            <th>Сумма</th>
+                            <th>Статус</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordersTable">
+                        <!-- Заказы будут добавлены динамически -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Детали заказа -->
+    <div id="order-details-container" class="admin-container" style="display: none;">
+        <div class="header">
+            <h1>Детали заказа <span id="order-id-display"></span></h1>
+            <div class="header-buttons">
+                <button id="back-to-orders-btn" class="back-btn">← Назад к заказам</button>
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div class="order-info-panel">
+                <div class="order-info-section">
+                    <h3>Информация о клиенте</h3>
+                    <div id="customer-info" class="info-group">
+                        <!-- Данные о клиенте будут добавлены динамически -->
+                    </div>
+                </div>
+                <div class="order-info-section">
+                    <h3>Информация о заказе</h3>
+                    <div id="order-meta" class="info-group">
+                        <!-- Метаданные заказа будут добавлены динамически -->
+                    </div>
+                </div>
+                <div class="order-status-section">
+                    <h3>Статус заказа</h3>
+                    <div class="status-controls">
+                        <select id="order-status-select">
+                            <option value="new">Новый</option>
+                            <option value="processing">В обработке</option>
+                            <option value="completed">Выполнен</option>
+                            <option value="cancelled">Отменен</option>
+                        </select>
+                        <button id="update-status-btn" class="update-btn">Обновить статус</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-items">
+                <h3>Товары в заказе</h3>
+                <div id="order-products" class="order-products-list">
+                    <!-- Товары в заказе будут добавлены динамически -->
+                </div>
+                <div class="order-total">
+                    <h4>Итого:</h4>
+                    <p id="order-total-price">0 €</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Секция редактирования товара -->
+    <div id="edit-container" class="edit-container" style="display: none;">
+        <div class="header">
+            <h1 id="edit-title">Добавить товар</h1>
+            <button id="back-to-list-btn" class="back-btn">← Вернуться к списку</button>
+        </div>
+        
+        <form id="productForm" class="product-edit-form">
+            <input type="hidden" id="productId">
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="productName">Название:</label>
+                    <input type="text" id="productName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productPrice">Цена:</label>
+                    <input type="number" id="productPrice" step="0.01" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="productDescription">Описание:</label>
+                <textarea id="productDescription" required></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group image-upload-group">
+                    <label for="productImage">Изображение:</label>
+                    <input type="file" id="productImage" accept="image/*">
+                    <div class="image-preview-container">
+                        <img id="imagePreview" src="#" alt="Предпросмотр изображения" style="max-width: 100%; max-height: 200px; display: none;">
+                    </div>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="productInStock">
+                        <span class="checkbox-label">В наличии</span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-buttons">
+                <button type="submit" class="save-btn">Сохранить</button>
+                <button type="button" id="cancel-edit-btn" class="cancel-btn">Отмена</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Подключаем скрипт -->
+    <script src="admin.js"></script>
+</body>
+</html>
