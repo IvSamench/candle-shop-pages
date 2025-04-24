@@ -1571,3 +1571,84 @@ quantity-btn:hover {
         gap: 8px;
     }
 }
+
+/* Фиксирование горизонтальной прокрутки на мобильных устройствах */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100%;
+    position: relative;
+}
+
+* {
+    box-sizing: border-box;
+    max-width: 100%;
+}
+
+/* Обеспечиваем адаптивность изображений */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Обновленные медиа-запросы для iPhone 14 Pro Max и подобных устройств */
+@media screen and (max-width: 430px) {
+    .container {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 10px;
+        padding-right: 10px;
+        overflow-x: hidden;
+    }
+
+    .inside_container {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+    }
+
+    hr {
+        width: 100%;
+    }
+
+    .product {
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
+
+/* Исправление для вьюпорта на особых устройствах (iPhone 14 Pro Max) */
+@media screen and (min-width: 390px) and (max-width: 430px) {
+    body {
+        width: 100vw;
+        overflow-x: hidden;
+    }
+    
+    .container {
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 10px;
+    }
+    
+    .galary {
+        flex-direction: column;
+        align-items: center;
+        padding: 0;
+    }
+}

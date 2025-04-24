@@ -10,6 +10,19 @@ body {
     overflow-y: auto;
 }
 
+/* Решение проблемы горизонтальной прокрутки на мобильных устройствах */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+}
+
+/* Дополнительные правила для предотвращения горизонтального скролла */
+* {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
 /* Стили для страницы входа */
 .login-container {
     background-color: black;
@@ -378,6 +391,30 @@ table td button:hover {
     }
     
     table {
+        display: block;
+        overflow-x: hidden;
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    .products-table, .orders-table {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    
+    .header {
+        width: 100%;
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+    
+    .header-buttons button {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    table {
         font-size: 14px;
     }
 }
@@ -651,4 +688,372 @@ table td button:hover {
 
 .order-btn:hover {
     background-color: #666;
+}
+
+/* Полная адаптивная верстка для административной панели */
+/* Расширенные медиа-запросы для лучшей адаптивности */
+
+/* Большие экраны */
+@media (min-width: 1400px) {
+    .admin-container, .edit-container {
+        max-width: 1400px;
+    }
+}
+
+/* Средние экраны (ноутбуки) */
+@media (max-width: 1200px) {
+    .admin-container, .edit-container {
+        width: 95%;
+        padding: 20px;
+    }
+    
+    .header-buttons {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .header-buttons button {
+        padding: 7px 12px;
+        font-size: 13px;
+    }
+    
+    .orders-summary {
+        flex-wrap: wrap;
+    }
+    
+    .summary-card {
+        min-width: 150px;
+    }
+}
+
+/* Планшеты */
+@media (max-width: 992px) {
+    body {
+        padding: 15px;
+    }
+    
+    .admin-container, .edit-container {
+        margin: 30px auto;
+        padding: 15px;
+    }
+    
+    .header h1 {
+        font-size: 20px;
+    }
+    
+    table th, 
+    table td {
+        padding: 10px 8px;
+        font-size: 13px;
+    }
+    
+    .image-preview-container {
+        min-height: 80px;
+    }
+    
+    .order-info-panel, 
+    .order-items {
+        padding: 15px;
+    }
+    
+    .info-group {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Улучшение отображения заказов */
+    .orders-filters {
+        padding: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .order-product-item {
+        flex-direction: row;
+        align-items: center;
+        padding: 10px;
+    }
+}
+
+/* Маленькие планшеты и большие смартфоны */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    /* Улучшение отображения хедера */
+    .header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .header-buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .header-buttons button {
+        flex: 1 1 calc(50% - 10px);
+        margin: 5px;
+        text-align: center;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    /* Улучшение отображения таблицы товаров */
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    table td button {
+        padding: 5px 8px;
+        margin: 2px;
+        font-size: 12px;
+    }
+    
+    /* Уточнение стилей для формы редактирования на мобильных устройствах */
+    .form-group input,
+    .form-group textarea {
+        padding: 8px;
+        font-size: 13px;
+    }
+    
+    .form-group label {
+        font-size: 13px;
+    }
+    
+    /* Улучшение отображения заказов */
+    .order-product-item {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .order-product-item img {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+    
+    .order-product-info {
+        text-align: center;
+    }
+    
+    .status-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .status-controls select,
+    .update-btn {
+        width: 100%;
+    }
+}
+
+/* Мобильные устройства */
+@media (max-width: 576px) {
+    body {
+        padding: 5px;
+    }
+    
+    .admin-container, .edit-container {
+        width: 100%;
+        margin: 10px auto;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    
+    .login-container {
+        padding: 20px 15px;
+    }
+    
+    .login-logo {
+        font-size: 40px;
+    }
+    
+    .login-header h1 {
+        font-size: 20px;
+    }
+    
+    /* Максимальная оптимизация для маленьких экранов */
+    .products-table {
+        margin-top: 15px;
+    }
+    
+    /* Переключаем таблицу товаров на карточный вид для мобильных */
+    .products-table table {
+        display: block;
+    }
+    
+    .products-table table thead {
+        display: none; /* Скрываем заголовки таблицы */
+    }
+    
+    .products-table table tbody, 
+    .products-table table tr, 
+    .products-table table td {
+        display: block;
+        text-align: center;
+    }
+    
+    .products-table table tr {
+        margin-bottom: 20px;
+        padding: 10px;
+        border: 1px solid #4a4a4a;
+        border-radius: 5px;
+        background-color: #2a2a2a;
+    }
+    
+    .products-table table td {
+        border: none;
+        padding: 8px 5px;
+        position: relative;
+        padding-left: 8px;
+    }
+    
+    .products-table table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .products-table table td:nth-of-type(1):before { content: "ID: "; }
+    .products-table table td:nth-of-type(3):before { content: "Название: "; }
+    .products-table table td:nth-of-type(4):before { content: "Цена: "; }
+    .products-table table td:nth-of-type(5):before { content: "В наличии: "; }
+    
+    /* Улучшаем отображение кнопок в карточке товара */
+    .products-table td:last-child {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 10px;
+    }
+    
+    .products-table td button {
+        flex: 1;
+        max-width: 120px;
+    }
+    
+    /* Улучшение отображения редактирования товара */
+    .form-buttons {
+        flex-direction: column;
+    }
+    
+    .form-buttons button {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+    
+    /* Улучшение отображения заказов */
+    .orders-summary {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .summary-card {
+        width: 100%;
+    }
+    
+    /* Применяем карточный вид для таблицы заказов */
+    .orders-table table {
+        display: block;
+    }
+    
+    .orders-table table thead {
+        display: none;
+    }
+    
+    .orders-table table tbody, 
+    .orders-table table tr, 
+    .orders-table table td {
+        display: block;
+        text-align: center;
+    }
+    
+    .orders-table table tr {
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid #4a4a4a;
+        border-radius: 5px;
+        background-color: #2a2a2a;
+    }
+    
+    .orders-table table td {
+        border: none;
+        padding: 5px;
+        position: relative;
+    }
+    
+    .orders-table table td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+    
+    .orders-table table td:nth-of-type(1):before { content: "ID заказа: "; }
+    .orders-table table td:nth-of-type(2):before { content: "Дата: "; }
+    .orders-table table td:nth-of-type(3):before { content: "Клиент: "; }
+    .orders-table table td:nth-of-type(4):before { content: "Сумма: "; }
+    .orders-table table td:nth-of-type(5):before { content: "Статус: "; }
+}
+
+/* Экстремально маленькие экраны */
+@media (max-width: 375px) {
+    .header-buttons button {
+        font-size: 11px;
+        padding: 6px;
+    }
+    
+    .login-logo {
+        font-size: 36px;
+    }
+    
+    .login-header h1 {
+        font-size: 18px;
+    }
+    
+    .products-table td button {
+        padding: 5px;
+        font-size: 11px;
+    }
+}
+
+/* Решение для производительности на мобильных устройствах */
+@media (max-width: 576px) {
+    .products-table table,
+    .orders-table table {
+        contain: content;
+    }
+    
+    /* Плавные переходы только для больших экранов */
+    @media (min-width: 992px) {
+        .header-buttons button,
+        table td button,
+        .login-btn,
+        .form-group input,
+        .form-group textarea {
+            transition: all 0.3s ease;
+        }
+    }
+}
+
+/* Адаптивность для ориентации экрана */
+@media (max-height: 600px) and (orientation: landscape) {
+    .admin-container, .edit-container {
+        min-height: auto;
+        margin: 10px auto;
+    }
+    
+    .login-container {
+        margin: 20px auto;
+    }
+    
+    .form-group textarea {
+        min-height: 60px;
+    }
 }

@@ -172,10 +172,7 @@ function fallbackLoadProducts() {
 }
 
 // Запускаем загрузку товаров при загрузке страницы
-document.addEventListener('DOMContentLoaded', function() {
-    loadProductData();
-    setupResponsiveUI();
-});
+document.addEventListener('DOMContentLoaded', loadProductData);
 
 // Корзина
 let cart = [];
@@ -216,34 +213,12 @@ function renderProductCard(productsToRender = products, limit = 3) {
     let galary = document.querySelector('.galary');
     if (!galary) return;
     galary.innerHTML = '';
-    
-    // Определяем количество товаров на основе размера экрана
-    let displayLimit = limit;
-    if (isMobileDevice() && !catalogProduct.classList.contains("active")) {
-        displayLimit = 4; // На мобильных устройствах показываем больше товаров
-    }
-    
     if (catalogProduct.classList.contains("active")) { 
         productsToRender.forEach(product =>
             galary.innerHTML += createProductCard(product));
     } else {
-        productsToRender.slice(0, displayLimit).forEach(product =>
+        productsToRender.slice(0, limit).forEach(product =>
             galary.innerHTML += createProductCard(product));
-    }
-    
-    // Добавляем обработчики для сенсорных устройств
-    if (isMobileDevice()) {
-        document.querySelectorAll('.product').forEach(product => {
-            product.addEventListener('touchstart', function() {
-                this.querySelector('.product-overlay').style.opacity = '1';
-            });
-            
-            product.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    this.querySelector('.product-overlay').style.opacity = '0';
-                }, 300);
-            });
-        });
     }
 }
 
@@ -362,7 +337,6 @@ function showNotification() {
 function openCart(){
     let modal=document.getElementById('cartModal')
     modal.classList.add('active')
-    adjustModalPositions();
 }
 
 // Закрыть корзину
@@ -425,7 +399,7 @@ buttonDelivery.addEventListener('click',(e)=>{
 function openDelivery(){
     let modal=document.getElementById('deliveryModal');
     modal.classList.add("active")
-    adjustModalPositions();
+
 }
 let buttonDeliveryClose=document.querySelector('.closeDelivery')
     buttonDeliveryClose.addEventListener('click',(e)=>{
@@ -509,8 +483,9 @@ function openCheckout() {
         // Открываем модальное окно оформления заказа
         modal.classList.add('active');
         modal.style.display = 'block';
-        adjustModalPositions();
         console.log('Модальное окно оформления заказа активировано (добавлен класс active)');
+        console.log('Видимость модального окна:', getComputedStyle(modal).display);
+        console.log('Классы модального окна:', modal.className);
     }, 50);
 }
 
@@ -636,7 +611,6 @@ function openContacts() {
     let modal = document.getElementById('contactsModal');
     modal.classList.add("active");
     modal.style.display = 'block';
-    adjustModalPositions();
 }
 
 function closeContacts() {
@@ -684,7 +658,6 @@ function openReviews() {
     let modal = document.getElementById('reviewsModal');
     modal.classList.add("active");
     modal.style.display = 'block';
-    adjustModalPositions();
 }
 
 function closeReviews() {
@@ -725,71 +698,4 @@ document.addEventListener('click', function(e) {
     ) {
         closeReviews();
     }
-}
-
-// Функция для проверки мобильного устройства
-function isMobileDevice() {
-    return (window.innerWidth <= 768 || 
-            navigator.userAgent.match(/Android/i) || 
-            navigator.userAgent.match(/iPhone|iPad|iPod/i));
-}
-
-// Функция для настройки интерфейса в зависимости от устройства
-function setupResponsiveUI() {
-    const isMobile = isMobileDevice();
-    console.log('Мобильное устройство:', isMobile);
-    
-    // Настраиваем интерфейс для мобильных устройств
-    if (isMobile) {
-        // Ограничиваем количество товаров на странице для лучшей производительности
-        if (!catalogProduct.classList.contains("active")) {
-            renderProductCard(products, 4); // Показываем 4 товара на мобильном, если не открыт полный каталог
-        }
-        
-        // Добавляем обработчики для удобства использования на сенсорных экранах
-        document.querySelectorAll('.product').forEach(product => {
-            product.addEventListener('touchstart', function() {
-                this.querySelector('.product-overlay').style.opacity = '1';
-            });
-            
-            product.addEventListener('touchend', function() {
-                setTimeout(() => {
-                    this.querySelector('.product-overlay').style.opacity = '0';
-                }, 300);
-            });
-        });
-    }
-    
-    // Настраиваем модальные окна
-    adjustModalPositions();
-}
-
-// Функция для регулировки положения модальных окон
-function adjustModalPositions() {
-    const modals = document.querySelectorAll('.modal');
-    modals.forEach(modal => {
-        if (modal.classList.contains('active')) {
-            const modalContent = modal.querySelector('.modal-content');
-            // Центрирование модального окна при мобильной ориентации
-            if (window.innerHeight < 500 && window.innerWidth > window.innerHeight) {
-                // Ландшафтная ориентация на мобильном
-                modalContent.style.margin = '2% auto';
-                modalContent.style.maxHeight = '85vh';
-                modalContent.style.overflow = 'auto';
-            } else {
-                // Портретная ориентация или десктоп
-                modalContent.style.margin = isMobileDevice() ? '5% auto' : '15% auto';
-            }
-        }
-    });
-}
-
-// Обработчик изменения размера окна
-window.addEventListener('resize', function() {
-    setupResponsiveUI();
-});
-
-// Обработчик изменения ориентации устройства
-window.addEventListener('orientationchange', function() {
-    setTimeout(setupResponsiveUI, 100); // Небольшая задержка для корректного пересчета
 });

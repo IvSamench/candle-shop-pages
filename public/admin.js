@@ -195,14 +195,14 @@ function loadProducts() {
         }
         
         row.innerHTML = `
-            <td>${product.id}</td>
-            <td><img src="${imagePath}" alt="${product.name}" style="max-width: 50px; max-height: 50px;"></td>
-            <td>${product.name}</td>
-            <td>${product.price} €</td>
-            <td>${product.inStock ? 'Да' : 'Нет'}</td>
-            <td>
-                <button class="edit-btn" data-id="${product.id}">Редактировать</button>
-                <button class="delete-btn" data-id="${product.id}">Удалить</button>
+            <td data-label="ID">${product.id}</td>
+            <td data-label="Изображение"><img src="${imagePath}" alt="${product.name}" style="max-width: 50px; max-height: 50px;"></td>
+            <td data-label="Название">${product.name}</td>
+            <td data-label="Цена">${product.price} €</td>
+            <td data-label="В наличии">${product.inStock ? '<i class="fas fa-check-circle" style="color: #81c784;"></i>' : '<i class="fas fa-times-circle" style="color: #e57373;"></i>'}</td>
+            <td data-label="Действия">
+                <button class="edit-btn" data-id="${product.id}"><i class="fas fa-edit"></i> Редактировать</button>
+                <button class="delete-btn" data-id="${product.id}"><i class="fas fa-trash-alt"></i> Удалить</button>
             </td>
         `;
         
@@ -235,7 +235,7 @@ function loadProducts() {
         noticeContainer.style.borderRadius = '5px';
         noticeContainer.style.color = '#fcf4d0d4';
         noticeContainer.style.textAlign = 'center';
-        noticeContainer.textContent = 'Внимание: Изменения временные и будут сброшены при перезагрузке страницы магазина';
+        noticeContainer.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Внимание: Изменения временные и будут сброшены при перезагрузке страницы магазина';
         
         const tableParent = document.querySelector('.products-table');
         tableParent.insertBefore(noticeContainer, tableParent.firstChild);
@@ -429,7 +429,7 @@ function renderOrdersTable(orders) {
     tableBody.innerHTML = '';
     
     if (orders.length === 0) {
-        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;">Заказы отсутствуют</td></tr>`;
+        tableBody.innerHTML = `<tr><td colspan="6" style="text-align: center;"><i class="fas fa-exclamation-circle"></i> Заказы отсутствуют</td></tr>`;
         return;
     }
     
@@ -444,16 +444,35 @@ function renderOrdersTable(orders) {
             minute: '2-digit'
         });
         
+        // Выбираем иконку в зависимости от статуса заказа
+        let statusIcon = '';
+        switch(order.status) {
+            case 'new':
+                statusIcon = '<i class="fas fa-star"></i> ';
+                break;
+            case 'processing':
+                statusIcon = '<i class="fas fa-cog fa-spin"></i> ';
+                break;
+            case 'completed':
+                statusIcon = '<i class="fas fa-check-circle"></i> ';
+                break;
+            case 'cancelled':
+                statusIcon = '<i class="fas fa-ban"></i> ';
+                break;
+            default:
+                statusIcon = '<i class="fas fa-question-circle"></i> ';
+        }
+        
         // Создаем строку для заказа
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>#${order.id}</td>
-            <td>${formattedDate}</td>
-            <td>${order.customer.name}</td>
-            <td>${order.totalPrice.toFixed(2)} €</td>
-            <td class="order-status ${order.status}">${getStatusName(order.status)}</td>
-            <td>
-                <button onclick="viewOrderDetails(${order.id})">Детали</button>
+            <td data-label="ID заказа">#${order.id}</td>
+            <td data-label="Дата"><i class="far fa-calendar-alt"></i> ${formattedDate}</td>
+            <td data-label="Клиент"><i class="fas fa-user"></i> ${order.customer.name}</td>
+            <td data-label="Сумма"><i class="fas fa-euro-sign"></i> ${order.totalPrice.toFixed(2)} €</td>
+            <td data-label="Статус" class="order-status ${order.status}">${statusIcon}${getStatusName(order.status)}</td>
+            <td data-label="Действия">
+                <button onclick="viewOrderDetails(${order.id})"><i class="fas fa-info-circle"></i> Детали</button>
             </td>
         `;
         tableBody.appendChild(row);
@@ -491,10 +510,10 @@ function viewOrderDetails(orderId) {
     // Заполнить информацию о клиенте
     const customerInfo = document.getElementById('customer-info');
     customerInfo.innerHTML = `
-        <p><strong>Имя:</strong> ${order.customer.name}</p>
-        <p><strong>Email:</strong> ${order.customer.email}</p>
-        <p><strong>Телефон:</strong> ${order.customer.phone}</p>
-        <p><strong>Адрес доставки:</strong> ${order.customer.address}</p>
+        <p><i class="fas fa-user"></i> <strong>Имя:</strong> ${order.customer.name}</p>
+        <p><i class="fas fa-envelope"></i> <strong>Email:</strong> ${order.customer.email}</p>
+        <p><i class="fas fa-phone"></i> <strong>Телефон:</strong> ${order.customer.phone}</p>
+        <p><i class="fas fa-map-marker-alt"></i> <strong>Адрес доставки:</strong> ${order.customer.address}</p>
     `;
     
     // Заполнить метаданные заказа
@@ -508,11 +527,30 @@ function viewOrderDetails(orderId) {
         minute: '2-digit'
     });
     
+    // Выбираем иконку в зависимости от статуса заказа
+    let statusIcon = '';
+    switch(order.status) {
+        case 'new':
+            statusIcon = '<i class="fas fa-star"></i> ';
+            break;
+        case 'processing':
+            statusIcon = '<i class="fas fa-cog"></i> ';
+            break;
+        case 'completed':
+            statusIcon = '<i class="fas fa-check-circle"></i> ';
+            break;
+        case 'cancelled':
+            statusIcon = '<i class="fas fa-ban"></i> ';
+            break;
+        default:
+            statusIcon = '<i class="fas fa-question-circle"></i> ';
+    }
+    
     orderMeta.innerHTML = `
-        <p><strong>Номер заказа:</strong> #${order.id}</p>
-        <p><strong>Дата оформления:</strong> ${formattedDate}</p>
-        <p><strong>Количество товаров:</strong> ${order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
-        <p><strong>Статус:</strong> ${getStatusName(order.status)}</p>
+        <p><i class="fas fa-hashtag"></i> <strong>Номер заказа:</strong> #${order.id}</p>
+        <p><i class="far fa-calendar-alt"></i> <strong>Дата оформления:</strong> ${formattedDate}</p>
+        <p><i class="fas fa-shopping-basket"></i> <strong>Количество товаров:</strong> ${order.items.reduce((sum, item) => sum + item.quantity, 0)}</p>
+        <p>${statusIcon}<strong>Статус:</strong> ${getStatusName(order.status)}</p>
     `;
     
     // Установить текущий статус в выпадающем списке
@@ -539,7 +577,7 @@ function viewOrderDetails(orderId) {
             <img src="${imagePath}" alt="${item.name}">
             <div class="order-product-info">
                 <h4>${item.name}</h4>
-                <p>${item.price.toFixed(2)} € × ${item.quantity} шт.</p>
+                <p><i class="fas fa-tag"></i> ${item.price.toFixed(2)} € × ${item.quantity} шт.</p>
             </div>
             <div class="order-product-price">${itemTotal.toFixed(2)} €</div>
         `;
