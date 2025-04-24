@@ -3,14 +3,13 @@ body{
     background-color: #252323;
 }
 .container{
-    background-color:black;
-    max-width: 1400px; /* Максимальная ширина контейнера */
-    margin-top: 150px;
+    background-color: black;
+    max-width: 1400px;
+    width: 100%; /* Добавляем width 100% */
     margin: 0 auto; /* Центрирование контейнера */
-    border-radius: 15px; /* Закругление углов */
-    
-    box-shadow: 0 0 30px rgba(240, 241, 235, 0.575); 
-
+    border-radius: 15px;
+    box-shadow: 0 0 30px rgba(240, 241, 235, 0.575);
+    overflow-x: hidden; /* Предотвращаем горизонтальную прокрутку */
 }
 /* header{
     
@@ -48,20 +47,20 @@ h1{
 .inside_container{
     display: flex;
     flex-direction: column;
-    margin-left: 100px;
+    margin-left: auto; /* Автоматические отступы для центрирования */
+    margin-right: auto;
     max-width: 1200px;
+    width: 100%;
+    padding: 0 20px; /* Добавляем отступы внутри контейнера */
 }
 hr {
     display: flex;
-    
     border: none; /* Убираем стандартные границы */
     height: 25px; /* Толщина линии */
-    width: 1200px;
-    
-    margin-bottom: 0px;
-    margin-top: 0px;
+    width: 100%; /* Процентная ширина вместо фиксированной */
+    max-width: 1200px; /* Максимальная ширина */
+    margin: 0 auto; /* Центрирование */
     background-color: #323539; /* Цвет линии */
-    /* Отступы сверху и снизу */
 }
 
 
@@ -1598,8 +1597,8 @@ img {
         max-width: 100%;
         margin-left: 0;
         margin-right: 0;
-        padding-left: 10px;
-        padding-right: 10px;
+        /* padding-left: 10px;
+        padding-right: 10px; */
         overflow-x: hidden;
     }
 
