@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main  # замените на нужную ветку, если она у вас другая
+      - main  
 
 jobs:
   deploy:
@@ -17,4 +17,4 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./  # корневая директория, где находится index.html (относительный путь как в GitHub)
+          publish_dir: ./  

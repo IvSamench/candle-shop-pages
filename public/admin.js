@@ -158,6 +158,7 @@ async function loadTempProducts() {
         // Отображаем товары в админ-панели
         loadProducts();
     } catch (error) {
+        // Только критические ошибки, связанные с загрузкой продуктов
         console.error('Ошибка при загрузке временных данных:', error);
     }
 }
@@ -383,7 +384,6 @@ async function resetProductsData() {
             // Показываем уведомление об успешном сбросе
             alert('Данные успешно сброшены до оригинальных значений из products.json');
         } catch (error) {
-            console.error('Ошибка при сбросе данных:', error);
             alert('Произошла ошибка при сбросе данных. Пожалуйста, попробуйте еще раз.');
         }
     }
@@ -618,5 +618,5 @@ function updateOrderStatus() {
 
 let order=document.getElementById('order-btn')
 order.addEventListener('click',function(){
-    console.log('click')
+    // Удалено логирование
 })
