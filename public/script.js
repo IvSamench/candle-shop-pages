@@ -17,37 +17,19 @@ async function loadProductData() {
         // Если нет данных в localStorage, загружаем из products.json напрямую
         console.log('Загружаем товары из файла products.json');
         
-        // Массив путей к файлу products.json для попытки загрузки
-        const paths = [
-            '../products.json',     // Относительный путь (работает локально)
-            './products.json',      // В том же каталоге
-            '/products.json',       // От корня сайта
-            'products.json'         // Просто имя файла
-        ];
-        
-        let loaded = false;
-        
-        // Пробуем загрузить файл из разных путей
-        for (const path of paths) {
-            try {
-                console.log(`Пробуем загрузить из: ${path}`);
-                const response = await fetch(path);
-                if (response.ok) {
-                    const originalData = await response.json();
-                    products = originalData;
-                    localStorage.setItem('productsData', JSON.stringify(originalData));
-                    renderProductCard(products);
-                    console.log(`Успешно загружено из: ${path}`);
-                    loaded = true;
-                    break;
-                }
-            } catch (error) {
-                console.log(`Не удалось загрузить из: ${path}`);
+        try {
+            // Используем проверенный рабочий путь
+            const response = await fetch('./products.json');
+            if (response.ok) {
+                const originalData = await response.json();
+                products = originalData;
+                localStorage.setItem('productsData', JSON.stringify(originalData));
+                renderProductCard(products);
+                console.log('Успешно загружено из: ./products.json');
+                return;
             }
-        }
-        
-        if (!loaded) {
-            console.error('Не удалось загрузить файл products.json ни по одному из путей');
+        } catch (error) {
+            console.error('Ошибка при загрузке products.json:', error);
         }
         
     } catch (error) {
