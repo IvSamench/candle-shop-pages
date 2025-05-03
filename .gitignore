@@ -1,0 +1,29 @@
+# Папка с модулями node.js
+node_modules/
+
+# Логи
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Файлы среды разработки
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Кеш
+.cache/
+.parcel-cache/
+
+# Файлы сборки
+dist/
+build/
+out/
+
+# Локальные файлы конфигурации
+.DS_Store
+Thumbs.db
