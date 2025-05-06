@@ -78,7 +78,8 @@ hr {
 } */
 
 .product {
-    height: 400px;
+    height: auto; /* Изменяем фиксированную высоту на auto */
+    min-height: 400px; /* Устанавливаем минимальную высоту */
     width: 300px;
     margin: 20px;
     padding: 15px;
@@ -86,6 +87,8 @@ hr {
     border-radius: 10px;
     transition: transform 0.3s ease;
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    display: flex; /* Добавляем flex для лучшего контроля */
+    flex-direction: column; /* Элементы в колонку */
 }
 
 .product-image {
@@ -97,8 +100,8 @@ hr {
 }
 
 .product-image img {
-    width: 300px;
-    height: 400px;
+    width: 100%; /* Изменяем на 100% вместо фиксированных значений */
+    height: 100%; /* Изменяем на 100% */
     object-fit: cover;
     transition: transform 0.3s ease;
 }
@@ -129,8 +132,12 @@ hr {
 }
 
 .product-info {
-   
     text-align: center;
+    flex-grow: 1; /* Добавляем flex-grow для занятия доступного пространства */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Распределяем элементы равномерно */
+    padding-top: 10px; /* Добавляем отступ сверху */
 }
 
 .product_title {
@@ -1649,5 +1656,49 @@ img {
         flex-direction: column;
         align-items: center;
         padding: 0;
+    }
+}
+
+/* Стили для кнопки админ-панели */
+.admin-panel-container {
+    position: relative;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.admin-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 5px;
+    color: #fcf4d0;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.admin-btn:hover {
+    color: #ffd700;
+    transform: scale(1.1);
+}
+
+/* Адаптивные стили для кнопки админ-панели */
+@media (max-width: 768px) {
+    .admin-panel-container {
+        margin: 5px 0;
+    }
+    
+    .admin-btn {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-btn {
+        font-size: 20px;
+        padding: 3px;
     }
 }
