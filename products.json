@@ -1,82 +1,162 @@
 [
     {
       "id": 1,
-      "name": "Ароматическая свеча \"Лаванда\"",
+      "name": {
+        "ru": "Ароматическая свеча \"Лаванда\"",
+        "en": "Aromatic candle \"Lavender\"",
+        "lt": "Aromatinė žvakė \"Levanda\""
+      },
       "price": 10,
       "image": "img/1.png",
       "inStock": false,
-      "description": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов"
+      "description": {
+        "ru": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов",
+        "en": "Soothing candle with lavender scent. Burning time: 40 hours",
+        "lt": "Raminanti žvakė su levandų aromatu. Degimo laikas: 40 valandų"
+      }
     },
     {
       "id": 2,
-      "name": "Свеча \"Ваниль\"",
+      "name": {
+        "ru": "Свеча \"Ваниль\"",
+        "en": "Candle \"Vanilla\"",
+        "lt": "Žvakė \"Vanilė\""
+      },
       "price": 20,
       "image": "img/2.png",
-      "description": "Сладкая ванильная свеча. Время горения: 40 часов",
+      "description": {
+        "ru": "Сладкая ванильная свеча. Время горения: 40 часов",
+        "en": "Sweet vanilla candle. Burning time: 40 hours",
+        "lt": "Saldi vanilės žvakė. Degimo laikas: 40 valandų"
+      },
       "inStock": true
     },
     {
       "id": 3,
-      "name": "Свеча \"Морской бриз\"",
+      "name": {
+        "ru": "Свеча \"Морской бриз\"",
+        "en": "Candle \"Sea Breeze\"",
+        "lt": "Žvakė \"Jūros brizas\""
+      },
       "price": 80,
       "image": "img/3.png",
-      "description": "Свежая свеча с ароматом моря. Время горения: 40 часов",
+      "description": {
+        "ru": "Свежая свеча с ароматом моря. Время горения: 40 часов",
+        "en": "Fresh candle with sea scent. Burning time: 40 hours",
+        "lt": "Gaivi žvakė su jūros aromatu. Degimo laikas: 40 valandų"
+      },
       "inStock": true
     },
     {
       "id": 4,
-      "name": "Свеча \"Корица\"",
+      "name": {
+        "ru": "Свеча \"Корица\"",
+        "en": "Candle \"Cinnamon\"",
+        "lt": "Žvakė \"Cinamonas\""
+      },
       "price": 25,
       "image": "img/4.jpg",
-      "description": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
+      "description": {
+        "ru": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
+        "en": "Warm candle with cinnamon scent. Burning time: 40 hours",
+        "lt": "Šilta žvakė su cinamono aromatu. Degimo laikas: 40 valandų"
+      },
       "inStock": true
     },
     {
       "id": 5,
-      "name": "Свеча \"Цитрус\"",
+      "name": {
+        "ru": "Свеча \"Цитрус\"",
+        "en": "Candle \"Citrus\"",
+        "lt": "Žvakė \"Citrusiniai\""
+      },
       "price": 15,
       "image": "img/5.jpg",
-      "description": "Свежая свеча с цитрусовым ароматом. Время горения: 40 часов",
+      "description": {
+        "ru": "Свежая свеча с цитрусовым ароматом. Время горения: 40 часов",
+        "en": "Fresh candle with citrus scent. Burning time: 40 hours",
+        "lt": "Gaivi žvakė su citrusinių vaisių aromatu. Degimo laikas: 40 valandų"
+      },
       "inStock": true
     },
     {
       "id": 6,
-      "name": "Свеча \"Мята\"",
+      "name": {
+        "ru": "Свеча \"Мята\"",
+        "en": "Candle \"Mint\"",
+        "lt": "Žvakė \"Mėta\""
+      },
       "price": 22,
       "image": "img/6.avif",
-      "description": "Освежающая свеча с ароматом мяты. Время горения: 40 часов",
+      "description": {
+        "ru": "Освежающая свеча с ароматом мяты. Время горения: 40 часов",
+        "en": "Refreshing candle with mint scent. Burning time: 40 hours",
+        "lt": "Gaivinanti žvakė su mėtų aromatu. Degimo laikas: 40 valandų"
+      },
       "inStock": true
     },
     {
-        "id": 7,
-        "name": "Ароматическая свеча \"Лаванда\"",
-        "price": 20,
-        "image": "img/1.png",
-        "inStock": false,
-        "description": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов"
+      "id": 7,
+      "name": {
+        "ru": "Ароматическая свеча \"Лаванда\"",
+        "en": "Aromatic candle \"Lavender\"",
+        "lt": "Aromatinė žvakė \"Levanda\""
       },
-      {
-        "id": 8,
-        "name": "Свеча \"Ваниль\"",
-        "price": 48,
-        "image": "img/2.png",
-        "description": "Сладкая ванильная свеча. Время горения: 40 часов",
-        "inStock": true
-      },
-      {
-        "id": 9,
-        "name": "Свеча \"Морской бриз\"",
-        "price": 99,
-        "image": "img/3.png",
-        "description": "Свежая свеча с ароматом моря. Время горения: 40 часов",
-        "inStock": true
-      },
-      {
-        "id": 10,
-        "name": "Свеча \"Корица\"",
-        "price": 5,
-        "image": "img/4.jpg",
-        "description": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
-        "inStock": true
+      "price": 20,
+      "image": "img/1.png",
+      "inStock": false,
+      "description": {
+        "ru": "Успокаивающая свеча с ароматом лаванды. Время горения: 40 часов",
+        "en": "Soothing candle with lavender scent. Burning time: 40 hours",
+        "lt": "Raminanti žvakė su levandų aromatu. Degimo laikas: 40 valandų"
       }
-    ]
+    },
+    {
+      "id": 8,
+      "name": {
+        "ru": "Свеча \"Ваниль\"",
+        "en": "Candle \"Vanilla\"",
+        "lt": "Žvakė \"Vanilė\""
+      },
+      "price": 48,
+      "image": "img/2.png",
+      "description": {
+        "ru": "Сладкая ванильная свеча. Время горения: 40 часов",
+        "en": "Sweet vanilla candle. Burning time: 40 hours",
+        "lt": "Saldi vanilės žvakė. Degimo laikas: 40 valandų"
+      },
+      "inStock": true
+    },
+    {
+      "id": 9,
+      "name": {
+        "ru": "Свеча \"Морской бриз\"",
+        "en": "Candle \"Sea Breeze\"",
+        "lt": "Žvakė \"Jūros brizas\""
+      },
+      "price": 99,
+      "image": "img/3.png",
+      "description": {
+        "ru": "Свежая свеча с ароматом моря. Время горения: 40 часов",
+        "en": "Fresh candle with sea scent. Burning time: 40 hours",
+        "lt": "Gaivi žvakė su jūros aromatu. Degimo laikas: 40 valandų"
+      },
+      "inStock": true
+    },
+    {
+      "id": 10,
+      "name": {
+        "ru": "Свеча \"Корица\"",
+        "en": "Candle \"Cinnamon\"",
+        "lt": "Žvakė \"Cinamonas\""
+      },
+      "price": 5,
+      "image": "img/4.jpg",
+      "description": {
+        "ru": "Теплая свеча с ароматом корицы. Время горения: 40 часов",
+        "en": "Warm candle with cinnamon scent. Burning time: 40 hours",
+        "lt": "Šilta žvakė su cinamono aromatu. Degimo laikas: 40 valandų"
+      },
+      "inStock": true
+    }
+]
