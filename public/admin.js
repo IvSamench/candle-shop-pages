@@ -1,29 +1,58 @@
 // filepath: d:\shop\public\admin.js
 
-// Конфигурация для входа
+/**
+ * Административная панель интернет-магазина свечей
+ * Administration panel for candle online shop
+ * 
+ * Файл содержит функционал для управления товарами и заказами:
+ * - Авторизация администратора
+ * - Управление товарами (добавление, редактирование, удаление)
+ * - Просмотр и управление заказами
+ * 
+ * The file contains functionality for managing products and orders:
+ * - Administrator authentication
+ * - Product management (adding, editing, deleting)
+ * - Viewing and managing orders
+ */
+
+/**
+ * Учетные данные администратора (для демонстрационных целей)
+ * Administrator credentials (for demonstration purposes)
+ */
 const adminCredentials = {
     username: "admin",
     password: "admin"
 };
 
-// Проверяем авторизацию при загрузке страницы
+/**
+ * Инициализация панели администратора при загрузке страницы
+ * Initialize administrator panel when page loads
+ */
 document.addEventListener('DOMContentLoaded', function() {
+    // Проверяем статус авторизации
+    // Check authorization status
     checkAuth();
     
-    // Обработчик формы входа
+    /**
+     * Обработчик формы входа в админ-панель
+     * Login form handler for admin panel
+     */
     document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
         
         const username = document.getElementById('username').value;
         const password = document.getElementById('password').value;
         
-        // Проверяем учетные данные
+        // Проверяем введенные учетные данные
+        // Check entered credentials
         if (username === adminCredentials.username && password === adminCredentials.password) {
-            // Успешный вход
+            // Успешный вход - сохраняем статус в localStorage
+            // Successful login - save status in localStorage
             localStorage.setItem('isAdmin', 'true');
             showAdminPanel();
         } else {
-            // Ошибка входа
+            // Ошибка входа - показываем сообщение об ошибке
+            // Login error - show error message
             document.getElementById('error-message').style.display = 'block';
             setTimeout(function() {
                 document.getElementById('error-message').style.display = 'none';
@@ -31,7 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Обработчики для навигации между разделами админ-панели
+    /**
+     * Обработчики для навигации по админ-панели
+     * Handlers for admin panel navigation
+     */
     document.getElementById('logout-btn').addEventListener('click', logout);
     document.getElementById('add-product-btn').addEventListener('click', showAddForm);
     document.getElementById('back-to-list-btn').addEventListener('click', showProductsList);
@@ -39,48 +71,67 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('reset-data-btn').addEventListener('click', resetProductsData);
     
     // Обработчик формы добавления/редактирования товара
+    // Handler for product add/edit form
     document.getElementById('productForm').addEventListener('submit', saveProduct);
     
-    // Добавляем обработчик события изменения файла изображения
+    // Обработчик загрузки изображения товара
+    // Handler for product image upload
     document.getElementById('productImage').addEventListener('change', handleImageUpload);
 
-    // Обработка нажатия на кнопку "Заказы"
+    /**
+     * Обработчики для работы с заказами
+     * Handlers for working with orders
+     */
+    // Переход к списку заказов
+    // Go to orders list
     document.getElementById('order-btn').addEventListener('click', function() {
-        // Скрыть секцию товаров и показать секцию заказов
+        // Скрываем секцию товаров и показываем секцию заказов
+        // Hide products section and show orders section
         document.getElementById('admin-container').style.display = 'none';
         document.getElementById('orders-container').style.display = 'block';
         
-        // Загрузить и отобразить заказы
+        // Загружаем список заказов
+        // Load orders list
         loadOrders();
     });
 
-    // Возврат к списку товаров из списка заказов
+    // Возврат к списку товаров
+    // Return to products list
     document.getElementById('back-to-products-btn').addEventListener('click', function() {
         document.getElementById('orders-container').style.display = 'none';
         document.getElementById('admin-container').style.display = 'block';
     });
 
-    // Обработка фильтрации заказов по статусу
+    // Фильтрация заказов по статусу
+    // Filter orders by status
     document.getElementById('status-filter').addEventListener('change', function() {
         loadOrders();
     });
 
-    // Обработка сортировки заказов по дате
+    // Сортировка заказов по дате
+    // Sort orders by date
     document.getElementById('date-sort').addEventListener('change', function() {
         loadOrders();
     });
 
-    // Возврат к списку заказов из детализации заказа
+    // Возврат к списку заказов из детализации
+    // Return to orders list from order details
     document.getElementById('back-to-orders-btn').addEventListener('click', function() {
         document.getElementById('order-details-container').style.display = 'none';
         document.getElementById('orders-container').style.display = 'block';
     });
 
-    // Обработка нажатия кнопки обновления статуса заказа
+    // Обновление статуса заказа
+    // Update order status
     document.getElementById('update-status-btn').addEventListener('click', updateOrderStatus);
 });
 
-// Функция для предварительного просмотра изображения
+/**
+ * Обрабатывает выбор изображения для товара и показывает предпросмотр
+ * Handles image selection for product and shows preview
+ * 
+ * @param {Event} e - Событие изменения input[type="file"]
+ */
 function handleImageUpload(e) {
     const fileInput = e.target;
     const imagePreview = document.getElementById('imagePreview');
@@ -93,11 +144,16 @@ function handleImageUpload(e) {
             imagePreview.style.display = 'block';
         }
         
-        reader.readAsDataURL(fileInput.files[0]); // Преобразует изображение в base64
+        // Конвертируем изображение в формат base64 для хранения
+        // Convert image to base64 format for storage
+        reader.readAsDataURL(fileInput.files[0]);
     }
 }
 
-// Проверка авторизации
+/**
+ * Проверяет авторизацию пользователя и показывает соответствующий интерфейс
+ * Checks user authorization and shows appropriate interface
+ */
 function checkAuth() {
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
     
@@ -108,40 +164,59 @@ function checkAuth() {
     }
 }
 
-// Показать админ-панель (список товаров)
+/**
+ * Отображает панель администратора со списком товаров
+ * Displays administrator panel with product list
+ */
 function showAdminPanel() {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('admin-container').style.display = 'block';
     document.getElementById('edit-container').style.display = 'none';
     
-    // При открытии админ-панели проверяем наличие временной копии данных
+    // Загружаем данные о товарах
+    // Load product data
     loadTempProducts();
 }
 
-// Показать форму редактирования товара
+/**
+ * Отображает форму редактирования товара
+ * Displays product editing form
+ * 
+ * @param {boolean} isNewProduct - Флаг, указывающий на создание нового товара
+ */
 function showEditPanel(isNewProduct = false) {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('admin-container').style.display = 'none';
     document.getElementById('edit-container').style.display = 'block';
     
+    // Устанавливаем заголовок в зависимости от режима (добавление/редактирование)
+    // Set title depending on mode (add/edit)
     document.getElementById('edit-title').textContent = isNewProduct ? 'Добавить товар' : 'Редактировать товар';
 }
 
-// Вернуться к списку товаров
+/**
+ * Возвращает к списку товаров из формы редактирования
+ * Returns to product list from edit form
+ */
 function showProductsList() {
     document.getElementById('login-container').style.display = 'none';
     document.getElementById('admin-container').style.display = 'block';
     document.getElementById('edit-container').style.display = 'none';
 }
 
-// Загрузка временной копии данных
+/**
+ * Загружает данные о товарах из localStorage или из JSON файла
+ * Loads product data from localStorage or from JSON file
+ */
 async function loadTempProducts() {
     try {
+        // Проверяем наличие данных в localStorage
+        // Check for data in localStorage
         let tempProducts = JSON.parse(localStorage.getItem('productsData'));
         
-        // Если нет данных в localStorage, загружаем из products.json
+        // Если данных нет, загружаем из файла products.json
+        // If no data, load from products.json file
         if (!tempProducts) {
-            console.log('Загружаем оригинальные данные из products.json в админ-панель');
             const response = await fetch('../products.json');
             
             if (!response.ok) {
@@ -151,34 +226,43 @@ async function loadTempProducts() {
             const originalData = await response.json();
             tempProducts = originalData;
             localStorage.setItem('productsData', JSON.stringify(tempProducts));
-        } else {
-            console.log('Используем временную копию из localStorage для админ-панели');
         }
         
-        // Отображаем товары в админ-панели
+        // Отображаем список товаров
+        // Display product list
         loadProducts();
     } catch (error) {
-        // Только критические ошибки, связанные с загрузкой продуктов
-        console.error('Ошибка при загрузке временных данных:', error);
+        // Обработка ошибок загрузки данных
+        // Handle data loading errors
     }
 }
 
-// Показать форму входа
+/**
+ * Отображает форму входа в админ-панель
+ * Displays admin panel login form
+ */
 function showLoginForm() {
     document.getElementById('login-container').style.display = 'block';
     document.getElementById('admin-container').style.display = 'none';
     document.getElementById('edit-container').style.display = 'none';
 }
 
-// Выход из админ-панели
+/**
+ * Выполняет выход из админ-панели
+ * Logs out from admin panel
+ */
 function logout() {
     localStorage.removeItem('isAdmin');
     showLoginForm();
 }
 
-// Загрузить продукты 
+/**
+ * Загружает и отображает список товаров в админ-панели
+ * Loads and displays product list in admin panel
+ */
 function loadProducts() {
     // Получаем временную копию данных из localStorage
+    // Get temporary data copy from localStorage
     let tempProducts = JSON.parse(localStorage.getItem('productsData')) || [];
     
     const productTable = document.getElementById('productTable');
@@ -188,9 +272,11 @@ function loadProducts() {
         const row = document.createElement('tr');
         
         // Используем изображение из продукта или пустую строку
+        // Use product image or empty string
         let imagePath = product.image || '';
         
         // Если путь относительный и не начинается с "/", добавляем слэш
+        // If path is relative and doesn't start with "/", add slash
         if (imagePath.startsWith('img/')) {
             imagePath = '../' + imagePath; // перейти на уровень выше для доступа к папке img
         }
@@ -211,6 +297,7 @@ function loadProducts() {
     });
     
     // Добавляем обработчики для кнопок редактирования и удаления
+    // Add handlers for edit and delete buttons
     document.querySelectorAll('.edit-btn').forEach(button => {
         button.addEventListener('click', function() {
             editProduct(this.getAttribute('data-id'));
@@ -224,9 +311,11 @@ function loadProducts() {
     });
     
     // Проверяем, существует ли уже уведомление
+    // Check if notification already exists
     const existingNotice = document.querySelector('.temp-notice-warning');
     
     // Если уведомление не существует, добавляем его
+    // If notification doesn't exist, add it
     if (!existingNotice) {
         const noticeContainer = document.createElement('div');
         noticeContainer.className = 'temp-notice-warning'; // Добавляем класс для идентификации
@@ -243,7 +332,10 @@ function loadProducts() {
     }
 }
 
-// Показать форму добавления товара
+/**
+ * Показывает форму для добавления нового товара
+ * Shows form for adding new product
+ */
 function showAddForm() {
     document.getElementById('productId').value = '';
     document.getElementById('productName').value = '';
@@ -254,17 +346,27 @@ function showAddForm() {
     document.getElementById('imagePreview').src = '#';
     
     // Показываем панель редактирования (режим добавления)
+    // Show edit panel (add mode)
     showEditPanel(true);
 }
 
-// Скрыть форму и вернуться к списку
+/**
+ * Скрывает форму редактирования товара
+ * Hides product edit form
+ */
 function hideForm() {
     showProductsList();
 }
 
-// Редактировать товар
+/**
+ * Загружает данные товара в форму редактирования
+ * Loads product data into edit form
+ * 
+ * @param {number|string} id - ID товара для редактирования
+ */
 function editProduct(id) {
     // Получаем временную копию данных
+    // Get temporary data copy
     const tempProducts = JSON.parse(localStorage.getItem('productsData')) || [];
     const product = tempProducts.find(p => p.id == id);
     
@@ -276,6 +378,7 @@ function editProduct(id) {
         document.getElementById('productInStock').checked = product.inStock;
         
         // Отображаем текущее изображение товара
+        // Display current product image
         if (product.image) {
             const imagePreview = document.getElementById('imagePreview');
             imagePreview.src = product.image;
@@ -285,27 +388,40 @@ function editProduct(id) {
         }
         
         // Показываем панель редактирования (режим редактирования)
+        // Show edit panel (edit mode)
         showEditPanel(false);
     } else {
         alert('Товар не найден');
     }
 }
 
-// Удалить товар
+/**
+ * Удаляет товар из списка
+ * Deletes product from list
+ * 
+ * @param {number|string} id - ID товара для удаления
+ */
 function deleteProduct(id) {
     if (confirm('Вы уверены, что хотите удалить этот товар?')) {
         let tempProducts = JSON.parse(localStorage.getItem('productsData')) || [];
         tempProducts = tempProducts.filter(p => p.id != id);
         
         // Обновляем временные данные
+        // Update temporary data
         localStorage.setItem('productsData', JSON.stringify(tempProducts));
         
         // Обновляем список товаров в админ-панели
+        // Update product list in admin panel
         loadProducts();
     }
 }
 
-// Сохранить товар
+/**
+ * Сохраняет данные товара (новые или отредактированные)
+ * Saves product data (new or edited)
+ * 
+ * @param {Event} e - Событие отправки формы
+ */
 async function saveProduct(e) {
     e.preventDefault();
     
@@ -317,13 +433,16 @@ async function saveProduct(e) {
     const imagePreview = document.getElementById('imagePreview');
     
     // Получаем изображение - либо новое загруженное, либо существующее
+    // Get image - either new uploaded or existing
     let imageBase64 = imagePreview.style.display !== 'none' ? imagePreview.src : null;
     
     // Получаем временную копию данных
+    // Get temporary data copy
     let tempProducts = JSON.parse(localStorage.getItem('productsData')) || [];
     
     if (id) {
         // Редактирование существующего товара
+        // Editing existing product
         const index = tempProducts.findIndex(p => p.id == id);
         if (index !== -1) {
             tempProducts[index] = {
@@ -333,11 +452,13 @@ async function saveProduct(e) {
                 description,
                 inStock,
                 // Сохраняем текущее изображение, если новое не выбрано
+                // Keep current image if new one is not selected
                 image: imageBase64 || tempProducts[index].image
             };
         }
     } else {
         // Добавление нового товара
+        // Adding new product
         const newId = tempProducts.length > 0 ? Math.max(...tempProducts.map(p => parseInt(p.id || 0))) + 1 : 1;
         tempProducts.push({
             id: newId,
@@ -346,27 +467,34 @@ async function saveProduct(e) {
             description,
             inStock,
             // Используем только загруженное изображение без дефолтных значений
+            // Use only uploaded image without default values
             image: imageBase64
         });
     }
     
     // Обновляем временные данные
+    // Update temporary data
     localStorage.setItem('productsData', JSON.stringify(tempProducts));
     
     // Скрываем форму и обновляем список товаров
+    // Hide form and update product list
     hideForm();
     loadProducts();
     
     // Показываем уведомление о временном характере изменений
+    // Show notification about temporary nature of changes
     alert('Товар сохранен. Изменения сохраняются до сброса данных.');
 }
 
-// Сбросить изменения и вернуть оригинальные данные из products.json
+/**
+ * Сбрасывает все изменения товаров и восстанавливает оригинальные данные
+ * Resets all product changes and restores original data
+ */
 async function resetProductsData() {
     if (confirm('Вы действительно хотите сбросить все изменения? Все внесенные изменения будут утеряны.')) {
         try {
             // Загружаем оригинальные данные из products.json
-            console.log('Сбрасываем изменения к оригинальным данным из products.json');
+            // Load original data from products.json
             const response = await fetch('../products.json');
             
             if (!response.ok) {
@@ -376,12 +504,15 @@ async function resetProductsData() {
             const originalData = await response.json();
             
             // Обновляем данные в localStorage
+            // Update data in localStorage
             localStorage.setItem('productsData', JSON.stringify(originalData));
             
             // Обновляем список товаров в админ-панели
+            // Update product list in admin panel
             loadProducts();
             
             // Показываем уведомление об успешном сбросе
+            // Show notification about successful reset
             alert('Данные успешно сброшены до оригинальных значений из products.json');
         } catch (error) {
             alert('Произошла ошибка при сбросе данных. Пожалуйста, попробуйте еще раз.');
@@ -389,22 +520,29 @@ async function resetProductsData() {
     }
 }
 
-// Функция загрузки заказов из localStorage
+/**
+ * Загружает и отображает список заказов с учетом фильтров
+ * Loads and displays orders list considering filters
+ */
 function loadOrders() {
     // Получаем заказы из localStorage
+    // Get orders from localStorage
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     
     // Получаем выбранные фильтры
+    // Get selected filters
     const statusFilter = document.getElementById('status-filter').value;
     const dateSort = document.getElementById('date-sort').value;
     
     // Фильтруем заказы по статусу (если выбран конкретный статус)
+    // Filter orders by status (if specific status is selected)
     let filteredOrders = orders;
     if (statusFilter !== 'all') {
         filteredOrders = orders.filter(order => order.status === statusFilter);
     }
     
     // Сортируем заказы по дате
+    // Sort orders by date
     filteredOrders.sort((a, b) => {
         const dateA = new Date(a.date);
         const dateB = new Date(b.date);
@@ -412,18 +550,26 @@ function loadOrders() {
     });
     
     // Обновляем информацию на дашборде
+    // Update information on dashboard
     document.getElementById('total-orders').textContent = orders.length;
     document.getElementById('new-orders').textContent = orders.filter(order => order.status === 'new').length;
     
     // Рассчитываем общую сумму заказов
+    // Calculate total revenue
     const totalRevenue = orders.reduce((sum, order) => sum + order.totalPrice, 0);
     document.getElementById('total-revenue').textContent = `${totalRevenue.toFixed(2)} €`;
     
     // Отображаем заказы в таблице
+    // Display orders in table
     renderOrdersTable(filteredOrders);
 }
 
-// Функция для отображения списка заказов в таблице
+/**
+ * Отображает список заказов в таблице
+ * Displays orders list in table
+ * 
+ * @param {Array} orders - Массив заказов для отображения
+ */
 function renderOrdersTable(orders) {
     const tableBody = document.getElementById('ordersTable');
     tableBody.innerHTML = '';
@@ -435,6 +581,7 @@ function renderOrdersTable(orders) {
     
     orders.forEach(order => {
         // Форматируем дату
+        // Format date
         const orderDate = new Date(order.date);
         const formattedDate = orderDate.toLocaleDateString('ru-RU', {
             day: '2-digit',
@@ -445,6 +592,7 @@ function renderOrdersTable(orders) {
         });
         
         // Выбираем иконку в зависимости от статуса заказа
+        // Select icon depending on order status
         let statusIcon = '';
         switch(order.status) {
             case 'new':
@@ -464,6 +612,7 @@ function renderOrdersTable(orders) {
         }
         
         // Создаем строку для заказа
+        // Create row for order
         const row = document.createElement('tr');
         row.innerHTML = `
             <td data-label="ID заказа">#${order.id}</td>
@@ -479,7 +628,13 @@ function renderOrdersTable(orders) {
     });
 }
 
-// Функция для получения названия статуса заказа на русском
+/**
+ * Возвращает локализованное название статуса заказа
+ * Returns localized order status name
+ * 
+ * @param {string} status - Код статуса заказа ('new', 'processing', 'completed', 'cancelled')
+ * @returns {string} Локализованное название статуса
+ */
 function getStatusName(status) {
     const statuses = {
         'new': 'Новый',
@@ -490,7 +645,12 @@ function getStatusName(status) {
     return statuses[status] || 'Неизвестно';
 }
 
-// Функция для просмотра деталей заказа
+/**
+ * Отображает подробную информацию о заказе
+ * Displays detailed order information
+ * 
+ * @param {number} orderId - ID заказа для просмотра
+ */
 function viewOrderDetails(orderId) {
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     const order = orders.find(o => o.id === orderId);
@@ -501,13 +661,16 @@ function viewOrderDetails(orderId) {
     }
     
     // Скрыть список заказов и показать детали заказа
+    // Hide orders list and show order details
     document.getElementById('orders-container').style.display = 'none';
     document.getElementById('order-details-container').style.display = 'block';
     
     // Установить ID заказа в заголовок
+    // Set order ID in header
     document.getElementById('order-id-display').textContent = `#${order.id}`;
     
     // Заполнить информацию о клиенте
+    // Fill customer information
     const customerInfo = document.getElementById('customer-info');
     customerInfo.innerHTML = `
         <p><i class="fas fa-user"></i> <strong>Имя:</strong> ${order.customer.name}</p>
@@ -517,6 +680,7 @@ function viewOrderDetails(orderId) {
     `;
     
     // Заполнить метаданные заказа
+    // Fill order metadata
     const orderMeta = document.getElementById('order-meta');
     const orderDate = new Date(order.date);
     const formattedDate = orderDate.toLocaleDateString('ru-RU', {
@@ -528,6 +692,7 @@ function viewOrderDetails(orderId) {
     });
     
     // Выбираем иконку в зависимости от статуса заказа
+    // Select icon depending on order status
     let statusIcon = '';
     switch(order.status) {
         case 'new':
@@ -554,9 +719,11 @@ function viewOrderDetails(orderId) {
     `;
     
     // Установить текущий статус в выпадающем списке
+    // Set current status in dropdown
     document.getElementById('order-status-select').value = order.status;
     
     // Отобразить товары в заказе
+    // Display products in order
     const orderProducts = document.getElementById('order-products');
     orderProducts.innerHTML = '';
     
@@ -566,9 +733,11 @@ function viewOrderDetails(orderId) {
         productElem.className = 'order-product-item';
         
         // Корректируем путь к изображению
+        // Adjust image path
         let imagePath = item.image || '';
         
         // Если путь относительный и начинается с "img/", добавляем "../" для правильного пути в админ-панели
+        // If path is relative and starts with "img/", add "../" for correct path in admin panel
         if (imagePath.startsWith('img/')) {
             imagePath = '../' + imagePath;
         }
@@ -585,16 +754,22 @@ function viewOrderDetails(orderId) {
     });
     
     // Обновить итоговую сумму
+    // Update total price
     document.getElementById('order-total-price').textContent = `${order.totalPrice.toFixed(2)} €`;
 }
 
-// Функция для обновления статуса заказа
+/**
+ * Обновляет статус заказа
+ * Updates order status
+ */
 function updateOrderStatus() {
     // Получить ID заказа из заголовка
+    // Get order ID from header
     const orderId = parseInt(document.getElementById('order-id-display').textContent.replace('#', ''));
     const newStatus = document.getElementById('order-status-select').value;
     
     // Получить заказы из localStorage
+    // Get orders from localStorage
     const orders = JSON.parse(localStorage.getItem('orders')) || [];
     const orderIndex = orders.findIndex(o => o.id === orderId);
     
@@ -604,19 +779,28 @@ function updateOrderStatus() {
     }
     
     // Обновить статус заказа
+    // Update order status
     orders[orderIndex].status = newStatus;
     
     // Сохранить обновленные заказы
+    // Save updated orders
     localStorage.setItem('orders', JSON.stringify(orders));
     
     // Обновить отображение
+    // Update display
     viewOrderDetails(orderId);
     
     // Показать уведомление
+    // Show notification
     alert('Статус заказа обновлен');
 }
 
+/**
+ * Обработчик нажатия на кнопку "Заказы"
+ * Handler for "Orders" button click
+ */
 let order=document.getElementById('order-btn')
 order.addEventListener('click',function(){
-    // Удалено логирование
-})
+    // Переход к управлению заказами
+    // Switch to order management
+});
