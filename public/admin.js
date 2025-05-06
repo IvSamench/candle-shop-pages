@@ -25,6 +25,69 @@ const adminCredentials = {
 };
 
 /**
+ * Объект с переводами для админ-панели
+ * Object with translations for admin panel
+ */
+const adminTranslations = {
+    'ru': {
+        'productSaved': 'Товар сохранен. Изменения сохраняются до сброса данных.',
+        'productNotFound': 'Товар не найден',
+        'deleteConfirm': 'Вы уверены, что хотите удалить этот товар?',
+        'resetConfirm': 'Вы действительно хотите сбросить все изменения? Все внесенные изменения будут утеряны.',
+        'resetSuccess': 'Данные успешно сброшены до оригинальных значений из products.json',
+        'resetError': 'Произошла ошибка при сбросе данных. Пожалуйста, попробуйте еще раз.',
+        'orderNotFound': 'Заказ не найден',
+        'statusUpdated': 'Статус заказа обновлен'
+    },
+    'en': {
+        'productSaved': 'Product saved. Changes are stored until data reset.',
+        'productNotFound': 'Product not found',
+        'deleteConfirm': 'Are you sure you want to delete this product?',
+        'resetConfirm': 'Do you really want to reset all changes? All modifications will be lost.',
+        'resetSuccess': 'Data successfully reset to original values from products.json',
+        'resetError': 'An error occurred while resetting the data. Please try again.',
+        'orderNotFound': 'Order not found',
+        'statusUpdated': 'Order status updated'
+    },
+    'lt': {
+        'productSaved': 'Produktas išsaugotas. Pakeitimai saugomi iki duomenų atstatymo.',
+        'productNotFound': 'Produktas nerastas',
+        'deleteConfirm': 'Ar tikrai norite ištrinti šį produktą?',
+        'resetConfirm': 'Ar tikrai norite atstatyti visus pakeitimus? Visi padaryti pakeitimai bus prarasti.',
+        'resetSuccess': 'Duomenys sėkmingai atstatyti į originalias reikšmes iš products.json',
+        'resetError': 'Įvyko klaida atkuriant duomenis. Bandykite dar kartą.',
+        'orderNotFound': 'Užsakymas nerastas',
+        'statusUpdated': 'Užsakymo būsena atnaujinta'
+    }
+};
+
+/**
+ * Функция для получения текущего языка
+ * Function to get the current language
+ */
+function getCurrentLanguage() {
+    // Пытаемся получить язык из localStorage, если его нет - используем русский
+    return localStorage.getItem('currentLanguage') || 'ru';
+}
+
+/**
+ * Функция для получения перевода сообщения
+ * Function to get the translation of a message
+ */
+function getTranslation(key) {
+    const lang = getCurrentLanguage();
+    return adminTranslations[lang][key] || adminTranslations['ru'][key]; // Если перевод не найден, используем русский
+}
+
+/**
+ * Функция для отображения уведомления с учетом языка
+ * Function to display a notification considering the language
+ */
+function showNotification(key) {
+    alert(getTranslation(key));
+}
+
+/**
  * Инициализация панели администратора при загрузке страницы
  * Initialize administrator panel when page loads
  */
@@ -124,6 +187,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Обновление статуса заказа
     // Update order status
     document.getElementById('update-status-btn').addEventListener('click', updateOrderStatus);
+
+    /**
+     * Обработчики для языковых вкладок в форме
+     * Handlers for language tabs in form
+     */
+    document.querySelectorAll('.form-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Убираем активный класс со всех вкладок
+            // Remove active class from all tabs
+            document.querySelectorAll('.form-tab').forEach(t => t.classList.remove('active'));
+            
+            // Скрываем все языковые секции
+            // Hide all language sections
+            document.querySelectorAll('.form-lang-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Делаем текущую вкладку активной
+            // Make current tab active
+            this.classList.add('active');
+            
+            // Показываем соответствующую языковую секцию
+            // Show corresponding language section
+            const lang = this.getAttribute('data-lang');
+            document.getElementById('lang-' + lang).style.display = 'block';
+        });
+    });
 });
 
 /**
@@ -281,10 +371,16 @@ function loadProducts() {
             imagePath = '../' + imagePath; // перейти на уровень выше для доступа к папке img
         }
         
+        // Проверяем, есть ли объект с многоязычными названиями
+        // Check if object with multilingual names exists
+        const productName = typeof product.name === 'object' ? 
+            product.name.ru || product.name.en || product.name.lt || 'Название отсутствует' : 
+            product.name || 'Название отсутствует';
+        
         row.innerHTML = `
             <td data-label="ID">${product.id}</td>
-            <td data-label="Изображение"><img src="${imagePath}" alt="${product.name}" style="max-width: 50px; max-height: 50px;"></td>
-            <td data-label="Название">${product.name}</td>
+            <td data-label="Изображение"><img src="${imagePath}" alt="${productName}" style="max-width: 50px; max-height: 50px;"></td>
+            <td data-label="Название">${productName}</td>
             <td data-label="Цена">${product.price} €</td>
             <td data-label="В наличии">${product.inStock ? '<i class="fas fa-check-circle" style="color: #81c784;"></i>' : '<i class="fas fa-times-circle" style="color: #e57373;"></i>'}</td>
             <td data-label="Действия">
@@ -338,12 +434,34 @@ function loadProducts() {
  */
 function showAddForm() {
     document.getElementById('productId').value = '';
-    document.getElementById('productName').value = '';
+    document.getElementById('productName_ru').value = '';
+    document.getElementById('productName_en').value = '';
+    document.getElementById('productName_lt').value = '';
+    document.getElementById('productDescription_ru').value = '';
+    document.getElementById('productDescription_en').value = '';
+    document.getElementById('productDescription_lt').value = '';
     document.getElementById('productPrice').value = '';
-    document.getElementById('productDescription').value = '';
     document.getElementById('productInStock').checked = false;
     document.getElementById('imagePreview').style.display = 'none';
     document.getElementById('imagePreview').src = '#';
+    
+    // Сбрасываем вкладки на русский язык
+    // Reset tabs to Russian language
+    document.querySelectorAll('.form-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.getAttribute('data-lang') === 'ru') {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Скрываем все языковые секции кроме русской
+    // Hide all language sections except Russian
+    document.querySelectorAll('.form-lang-section').forEach(section => {
+        section.style.display = 'none';
+        if (section.id === 'lang-ru') {
+            section.style.display = 'block';
+        }
+    });
     
     // Показываем панель редактирования (режим добавления)
     // Show edit panel (add mode)
@@ -372,26 +490,73 @@ function editProduct(id) {
     
     if (product) {
         document.getElementById('productId').value = product.id;
-        document.getElementById('productName').value = product.name;
+        
+        // Заполняем поля для разных языков
+        // Fill fields for different languages
+        if (typeof product.name === 'object') {
+            document.getElementById('productName_ru').value = product.name.ru || '';
+            document.getElementById('productName_en').value = product.name.en || '';
+            document.getElementById('productName_lt').value = product.name.lt || '';
+        } else {
+            // Если имя не объект, заполняем только русское название
+            // If name is not an object, fill only Russian name
+            document.getElementById('productName_ru').value = product.name || '';
+        }
+        
+        if (typeof product.description === 'object') {
+            document.getElementById('productDescription_ru').value = product.description.ru || '';
+            document.getElementById('productDescription_en').value = product.description.en || '';
+            document.getElementById('productDescription_lt').value = product.description.lt || '';
+        } else {
+            // Если описание не объект, заполняем только русское описание
+            // If description is not an object, fill only Russian description
+            document.getElementById('productDescription_ru').value = product.description || '';
+        }
+        
         document.getElementById('productPrice').value = product.price;
-        document.getElementById('productDescription').value = product.description;
         document.getElementById('productInStock').checked = product.inStock;
         
         // Отображаем текущее изображение товара
         // Display current product image
         if (product.image) {
             const imagePreview = document.getElementById('imagePreview');
-            imagePreview.src = product.image;
+            
+            // Если путь к изображению относительный, добавляем префикс
+            // If image path is relative, add prefix
+            if (product.image.startsWith('img/')) {
+                imagePreview.src = '../' + product.image;
+            } else {
+                imagePreview.src = product.image;
+            }
+            
             imagePreview.style.display = 'block';
         } else {
             document.getElementById('imagePreview').style.display = 'none';
         }
         
+        // Активируем русскую вкладку по умолчанию
+        // Activate Russian tab by default
+        document.querySelectorAll('.form-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.getAttribute('data-lang') === 'ru') {
+                tab.classList.add('active');
+            }
+        });
+        
+        // Показываем только русскую языковую секцию
+        // Show only Russian language section
+        document.querySelectorAll('.form-lang-section').forEach(section => {
+            section.style.display = 'none';
+            if (section.id === 'lang-ru') {
+                section.style.display = 'block';
+            }
+        });
+        
         // Показываем панель редактирования (режим редактирования)
         // Show edit panel (edit mode)
         showEditPanel(false);
     } else {
-        alert('Товар не найден');
+        showNotification('productNotFound');
     }
 }
 
@@ -402,7 +567,7 @@ function editProduct(id) {
  * @param {number|string} id - ID товара для удаления
  */
 function deleteProduct(id) {
-    if (confirm('Вы уверены, что хотите удалить этот товар?')) {
+    if (confirm(getTranslation('deleteConfirm'))) {
         let tempProducts = JSON.parse(localStorage.getItem('productsData')) || [];
         tempProducts = tempProducts.filter(p => p.id != id);
         
@@ -426,9 +591,24 @@ async function saveProduct(e) {
     e.preventDefault();
     
     const id = document.getElementById('productId').value;
-    const name = document.getElementById('productName').value;
+    
+    // Собираем названия для всех языков
+    // Collect names for all languages
+    const name = {
+        ru: document.getElementById('productName_ru').value,
+        en: document.getElementById('productName_en').value,
+        lt: document.getElementById('productName_lt').value
+    };
+    
+    // Собираем описания для всех языков
+    // Collect descriptions for all languages
+    const description = {
+        ru: document.getElementById('productDescription_ru').value,
+        en: document.getElementById('productDescription_en').value,
+        lt: document.getElementById('productDescription_lt').value
+    };
+    
     const price = parseFloat(document.getElementById('productPrice').value);
-    const description = document.getElementById('productDescription').value;
     const inStock = document.getElementById('productInStock').checked;
     const imagePreview = document.getElementById('imagePreview');
     
@@ -483,7 +663,7 @@ async function saveProduct(e) {
     
     // Показываем уведомление о временном характере изменений
     // Show notification about temporary nature of changes
-    alert('Товар сохранен. Изменения сохраняются до сброса данных.');
+    showNotification('productSaved');
 }
 
 /**
@@ -491,7 +671,7 @@ async function saveProduct(e) {
  * Resets all product changes and restores original data
  */
 async function resetProductsData() {
-    if (confirm('Вы действительно хотите сбросить все изменения? Все внесенные изменения будут утеряны.')) {
+    if (confirm(getTranslation('resetConfirm'))) {
         try {
             // Загружаем оригинальные данные из products.json
             // Load original data from products.json
@@ -513,9 +693,9 @@ async function resetProductsData() {
             
             // Показываем уведомление об успешном сбросе
             // Show notification about successful reset
-            alert('Данные успешно сброшены до оригинальных значений из products.json');
+            showNotification('resetSuccess');
         } catch (error) {
-            alert('Произошла ошибка при сбросе данных. Пожалуйста, попробуйте еще раз.');
+            showNotification('resetError');
         }
     }
 }
@@ -656,7 +836,7 @@ function viewOrderDetails(orderId) {
     const order = orders.find(o => o.id === orderId);
     
     if (!order) {
-        alert('Заказ не найден');
+        showNotification('orderNotFound');
         return;
     }
     
@@ -774,7 +954,7 @@ function updateOrderStatus() {
     const orderIndex = orders.findIndex(o => o.id === orderId);
     
     if (orderIndex === -1) {
-        alert('Заказ не найден');
+        showNotification('orderNotFound');
         return;
     }
     
@@ -792,7 +972,7 @@ function updateOrderStatus() {
     
     // Показать уведомление
     // Show notification
-    alert('Статус заказа обновлен');
+    showNotification('statusUpdated');
 }
 
 /**

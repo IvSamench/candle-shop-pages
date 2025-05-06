@@ -198,30 +198,61 @@
         <form id="productForm" class="product-edit-form">
             <input type="hidden" id="productId">
             
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="productName"><i class="fas fa-tag"></i> Название:</label>
-                    <input type="text" id="productName" required>
+            <div class="form-tabs">
+                <button type="button" class="form-tab active" data-lang="ru">Русский</button>
+                <button type="button" class="form-tab" data-lang="en">English</button>
+                <button type="button" class="form-tab" data-lang="lt">Lietuvių</button>
+            </div>
+            
+            <!-- Русский язык -->
+            <div class="form-lang-section" id="lang-ru">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName_ru"><i class="fas fa-tag"></i> Название (RU):</label>
+                        <input type="text" id="productName_ru" required>
+                    </div>
                 </div>
                 
                 <div class="form-group">
-                    <label for="productPrice"><i class="fas fa-euro-sign"></i> Цена:</label>
-                    <input type="number" id="productPrice" step="0.01" required>
+                    <label for="productDescription_ru"><i class="fas fa-align-left"></i> Описание (RU):</label>
+                    <textarea id="productDescription_ru" required></textarea>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="productDescription"><i class="fas fa-align-left"></i> Описание:</label>
-                <textarea id="productDescription" required></textarea>
+            <!-- Английский язык -->
+            <div class="form-lang-section" id="lang-en" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName_en"><i class="fas fa-tag"></i> Название (EN):</label>
+                        <input type="text" id="productName_en" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription_en"><i class="fas fa-align-left"></i> Описание (EN):</label>
+                    <textarea id="productDescription_en" required></textarea>
+                </div>
             </div>
             
-            <div class="form-row">
-                <div class="form-group image-upload-group">
-                    <label for="productImage"><i class="fas fa-image"></i> Изображение:</label>
-                    <input type="file" id="productImage" accept="image/*">
-                    <div class="image-preview-container">
-                        <img id="imagePreview" src="#" alt="Предпросмотр изображения" style="max-width: 100%; max-height: 200px; display: none;">
+            <!-- Литовский язык -->
+            <div class="form-lang-section" id="lang-lt" style="display: none;">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="productName_lt"><i class="fas fa-tag"></i> Название (LT):</label>
+                        <input type="text" id="productName_lt" required>
                     </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productDescription_lt"><i class="fas fa-align-left"></i> Описание (LT):</label>
+                    <textarea id="productDescription_lt" required></textarea>
+                </div>
+            </div>
+            
+            <div class="form-row shared-fields">
+                <div class="form-group">
+                    <label for="productPrice"><i class="fas fa-euro-sign"></i> Цена:</label>
+                    <input type="number" id="productPrice" step="0.01" required>
                 </div>
                 
                 <div class="form-group checkbox-group">
@@ -229,6 +260,14 @@
                         <input type="checkbox" id="productInStock">
                         <span class="checkbox-label"><i class="fas fa-box"></i> В наличии</span>
                     </label>
+                </div>
+            </div>
+            
+            <div class="form-group image-upload-group shared-fields">
+                <label for="productImage"><i class="fas fa-image"></i> Изображение:</label>
+                <input type="file" id="productImage" accept="image/*">
+                <div class="image-preview-container">
+                    <img id="imagePreview" src="#" alt="Предпросмотр изображения" style="max-width: 100%; max-height: 200px; display: none;">
                 </div>
             </div>
             
