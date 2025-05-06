@@ -244,6 +244,78 @@ table td button:hover {
     margin: 20px 0;
 }
 
+/* Стили для языковых вкладок в форме редактирования товара */
+.form-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #4a4a4a;
+    padding-bottom: 10px;
+}
+
+.form-tab {
+    background-color: #4a4a4a;
+    color: #fcf4d0d4;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    font-family: "Lugrasimo", cursive;
+}
+
+.form-tab:hover {
+    background-color: #666;
+}
+
+.form-tab.active {
+    background-color: #666;
+    position: relative;
+}
+
+.form-tab.active:after {
+    content: '';
+    position: absolute;
+    bottom: -11px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #666;
+}
+
+.form-lang-section {
+    background-color: #333;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.shared-fields {
+    margin-top: 20px;
+}
+
+/* Адаптивность для языковых вкладок */
+@media (max-width: 576px) {
+    .form-tabs {
+        flex-wrap: wrap;
+    }
+    
+    .form-tab {
+        flex: 1;
+        text-align: center;
+        padding: 8px 5px;
+        font-size: 13px;
+    }
+    
+    .form-tab.active:after {
+        bottom: -9px;
+    }
+}
+
 .form-row {
     display: flex;
     gap: 20px;
